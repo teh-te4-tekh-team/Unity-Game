@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine.Networking;
@@ -12,7 +13,48 @@ public class MainMenu : MonoBehaviour
 {
     public InputField Email;
     public InputField Password;
-    public Text Username;
+    public InputField CurrentUsername;
+    public Text StatusText;
+    public Animator Animator;
+
+    private GameUser currentUser;
+
+    public void Settings()
+    {
+        this.CurrentUsername.text = this.currentUser.Username;
+        this.Animator.SetBool("InSettings", true);
+    }
+
+    public void BackToMenu()
+    {
+        this.Animator.SetBool("InSettings", false);
+    }
+
+    public void ChangeUsername()
+    {
+        this.currentUser.Username = this.CurrentUsername.text;
+        string json = JsonUtility.ToJson(this.currentUser);
+
+        this.StartCoroutine(this.UsernameChangeRequest(json));
+    }
+
+    IEnumerator UsernameChangeRequest(string json)
+    {
+        Dictionary<string, string> headers = new Dictionary<string, string>();
+        headers.Add("Content-Type", "application/json");
+        headers.Add("X-HTTP-Method-Override", "PUT");
+
+        byte[] pData = Encoding.ASCII.GetBytes(json.ToCharArray());
+
+        WWW request = new WWW("http://localhost:4861/api/GameUser/" + this.currentUser.GameUserID, pData, headers);
+
+        yield return request;
+
+        if (request.isDone)
+        {
+            this.StatusText.text = "Username: " + this.currentUser.Username;
+        }
+    }
 
     public void Login()
     {
@@ -45,10 +87,16 @@ public class MainMenu : MonoBehaviour
 
         if (request.isDone)
         {
-            Debug.Log(request.text);
-            StartCoroutine(GetGameUser(request.text));
+            if (string.IsNullOrEmpty(request.text))
+            {
+                this.StatusText.text = "Invalid Credentials";
+                this.StatusText.color = Color.red;
+            }
+            else
+            {
+                this.StartCoroutine(this.GetGameUser(request.text));
+            }
         }
-        
     }
 
     private IEnumerator GetGameUser(string json)
@@ -64,10 +112,16 @@ public class MainMenu : MonoBehaviour
 
         if (request.isDone)
         {
-            Debug.Log(request.text);
-            this.Username.text = "Welcome!";
+            GameUser user = JsonUtility.FromJson<GameUser>(request.text);
+            this.currentUser = user;
+
+            this.Animator.SetTrigger("Logged");
+
+            this.StatusText.text = "Username: " + user.Username;
+            this.StatusText.color = Color.green;
         }
     }
+
 
     public void LoadGame()
     {

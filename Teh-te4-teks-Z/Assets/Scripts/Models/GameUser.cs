@@ -3,7 +3,7 @@
 [Serializable]
 public class GameUser
 {
-    public int GameUserID { get; set; }
+    public int GameUserID;
 
-    public string Username { get; set; }
+    public string Username;
 }
