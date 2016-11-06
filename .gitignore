@@ -18,6 +18,10 @@ ExportedObj/
 *.booproj
 *.svd
 
+# Layouts
+CurrentMaximizeLayout.dwlt
+CurrentLayout.dwlt
+
 
 # Unity3D generated meta files
 *.pidb.meta
