@@ -21,17 +21,18 @@ public class EnemyAttack : MonoBehaviour
         this.enemyMovement = GetComponent<EnemyMovement>();
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject == this.player)
+        if (collision.collider.transform.root.tag == "Player")
         {
+            Debug.Log("kur");
             this.playerInRange = true;
-        }
+        }       
     }
 
-    void OnTriggerExit(Collider other)
+    void OnCollisionExit(Collision collision)
     {
-        if (other.gameObject == this.player)
+        if (collision.collider.transform.root.tag == "Player")
         {
             this.playerInRange = false;
         }
@@ -41,9 +42,9 @@ public class EnemyAttack : MonoBehaviour
     {
         this.timer += Time.deltaTime;
 
-        if (timer >= timeBetweenAttacks && 
-            playerInRange &&
-            this.enemyHealth.currentHealth > 0)
+        if (timer >= timeBetweenAttacks 
+            && playerInRange 
+            && this.enemyHealth.currentHealth > 0)
         {
             Attack();
         }
