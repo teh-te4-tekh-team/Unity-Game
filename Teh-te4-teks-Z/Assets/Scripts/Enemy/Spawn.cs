@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Spawn : MonoBehaviour {
 
@@ -16,25 +15,28 @@ public class Spawn : MonoBehaviour {
 
         if (this.playerHealth.currentHealth <= 0)
         {
-            CancelInvoke("SpawnEnemy");
+            this.CancelInvoke("SpawnEnemy");
         }        
     }
 
     void OnTriggerEnter(Collider other)
     {
+        if(other.name != "PlayerModel") return;
+        
         if (other.transform.root.CompareTag("Player"))
         {
-            InvokeRepeating("SpawnEnemy", 0f, spawnTime);
+            this.InvokeRepeating("SpawnEnemy", 0f, this.spawnTime);
         }        
     }
 
     void OnTriggerExit(Collider other)
     {
-        CancelInvoke("SpawnEnemy");
+        this.CancelInvoke("SpawnEnemy");
     }
 
     void SpawnEnemy()
     {
-        Instantiate(enemy, this.transform.position, this.transform.rotation);
+        Instantiate(this.enemy, this.transform.position, this.transform.rotation);
+        this.enemy.GetComponentInChildren<MeshRenderer>().enabled = false;
     }
 }

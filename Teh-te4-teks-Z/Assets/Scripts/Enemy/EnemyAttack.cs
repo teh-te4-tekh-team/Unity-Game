@@ -25,7 +25,6 @@ public class EnemyAttack : MonoBehaviour
     {
         if (collision.collider.transform.root.tag == "Player")
         {
-            Debug.Log("kur");
             this.playerInRange = true;
         }       
     }
