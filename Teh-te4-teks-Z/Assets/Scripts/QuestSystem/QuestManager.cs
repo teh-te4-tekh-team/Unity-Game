@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour
 {
@@ -24,5 +24,10 @@ public class QuestManager : MonoBehaviour
 
     public void ShowQuestText(string questText)
     {
+        this.dialogueManager.dialogueLines.Clear();
+        this.dialogueManager.dialogueLines.Add(questText);
+
+        this.dialogueManager.currentLine = 0;
+        this.dialogueManager.ShowDialogue();
     }
 }

@@ -3,7 +3,6 @@ using System.Collections;
 
 public class QuestObject : MonoBehaviour
 {
-
     public int questNumber;
 
     public QuestManager questManager;
@@ -14,7 +13,7 @@ public class QuestObject : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
+        this.questManager = FindObjectOfType<QuestManager>();
     }
 
     // Update is called once per frame

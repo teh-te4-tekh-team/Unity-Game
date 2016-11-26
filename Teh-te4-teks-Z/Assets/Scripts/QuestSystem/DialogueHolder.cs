@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 public class DialogueHolder : MonoBehaviour {
 
-    public string dialogue;
     private DialogueManager dialogueManager;
+
+    public List<string> dialogueLines;
 
 	// Use this for initialization
 	void Start () {
@@ -25,7 +26,12 @@ public class DialogueHolder : MonoBehaviour {
 
         if (other.transform.root.CompareTag("Player"))
         {
-            this.dialogueManager.ShowBox(this.dialogue);
+            if (!this.dialogueManager.isDialogueActive)
+            {
+                this.dialogueManager.currentLine = 0;
+                this.dialogueManager.dialogueLines = this.dialogueLines;
+                this.dialogueManager.ShowDialogue();
+            }
         }
     }
 }
