@@ -18,11 +18,11 @@ public class EnemyMovement : MonoBehaviour {
     void FixedUpdate()
     {
         if (this.playerHealth.currentHealth <= 0)
-        {            
-            nav.Stop();
+        {
+            this.nav.Stop();
         }
 
-        nav.SetDestination(player.position);
-        nav.speed = 30;        
+        this.nav.SetDestination(this.player.position);
+        this.nav.speed = 30;        
     }
 }

@@ -17,7 +17,8 @@ public class MainMenu : MonoBehaviour
     public Text StatusText;
     public Animator Animator;
 
-    private GameUser currentUser;
+    public GameUser currentUser;
+    public GameObject player;
 
     public void Settings()
     {
@@ -55,6 +56,7 @@ public class MainMenu : MonoBehaviour
             this.StatusText.text = "Username: " + this.currentUser.Username;
         }
     }
+    
 
     public void Login()
     {
@@ -75,7 +77,6 @@ public class MainMenu : MonoBehaviour
 
     IEnumerator GetUser(string json)
     {
-
         Dictionary<string, string> headers = new Dictionary<string, string>();
         headers.Add("Content-Type", "application/json");
 
@@ -114,6 +115,10 @@ public class MainMenu : MonoBehaviour
         {
             GameUser user = JsonUtility.FromJson<GameUser>(request.text);
             this.currentUser = user;
+            
+            PlayerPrefs.SetString("Username", user.Username);
+            PlayerPrefs.SetInt("GameUserID", user.GameUserID);
+            PlayerPrefs.SetInt("Level", user.Level);
 
             this.Animator.SetTrigger("Logged");
 
