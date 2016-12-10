@@ -1,0 +1,13 @@
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\Assembly-CSharp-firstpass.dll
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\Assembly-CSharp-firstpass.pdb
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\UnityEditor.dll
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\UnityEngine.dll
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\UnityEngine.Networking.dll
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\UnityEngine.UI.dll
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\UnityEngine.xml
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\UnityEngine.UI.xml
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\UnityEngine.Networking.xml
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_bin\Debug\UnityEditor.xml
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_obj\Debug\Teh-te4-teks-Z.CSharp.Plugins.csprojResolveAssemblyReference.cache
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_obj\Debug\Assembly-CSharp-firstpass.dll
+D:\Github\DB_project\Unity-Game\Teh-te4-teks-Z\Temp\UnityVS_obj\Debug\Assembly-CSharp-firstpass.pdb
