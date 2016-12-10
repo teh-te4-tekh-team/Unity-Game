@@ -12,6 +12,14 @@ public class PlayerLevel : MonoBehaviour {
 	    this.gameUser.Level = PlayerPrefs.GetInt("Level");
 	}
 
+    void Update()
+    {
+        if (ScoreManager.score)
+        {
+            
+        }
+    }
+
     public void LevelUp()
     {
         
