@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PlayerMovement : MonoBehaviour {
 
@@ -19,22 +18,30 @@ public class PlayerMovement : MonoBehaviour {
     {
         if (this.playerHealth.currentHealth <= 0)
         {
-            Dead();
+            Die();
         }
+
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
         Move(horizontal, vertical);
     }
 
-    void Move(float horizontal, float vertical)
+    public void Move(float horizontal, float vertical)
     {
+        Vector3 oldPosition = this.movement;
         this.movement.Set(horizontal, 0, vertical);
         this.movement = this.movement.normalized * this.speed * Time.deltaTime;
         this.playerRigidBody.MovePosition(transform.position + movement);
+        Network.OnMoveClick(oldPosition, this.movement);
     }
 
-    void Dead()
+    public void Move(Vector3 position)
+    {
+        this.Move(position.x, position.z);
+    } 
+
+    void Die()
     {
         this.transform.position = Vector3.zero;
     }
