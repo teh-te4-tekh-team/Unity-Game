@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    private static readonly Vector3 InitialPosition = new Vector3(70, 2.5f, 20);
+
     private Dictionary<string, GameObject> players = new Dictionary<string, GameObject>();
 
     /// <summary>
@@ -23,7 +25,7 @@ public class Spawner : MonoBehaviour
     public GameObject SpawnPlayer(string id)
     {
         // Create an instance of an object passed as Component.
-        GameObject player = Instantiate(this.playerPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+        GameObject player = Instantiate(this.playerPrefab, InitialPosition, Quaternion.identity) as GameObject;
         player.GetComponent<NetworkEntity>().id = id;
 
         this.AddPlayer(id, player);

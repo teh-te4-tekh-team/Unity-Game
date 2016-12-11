@@ -24,16 +24,21 @@ public class PlayerMovement : MonoBehaviour {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Move(horizontal, vertical);
+        if (vertical != 0 || horizontal != 0)
+        {
+            Move(horizontal, vertical);
+        }
     }
 
     public void Move(float horizontal, float vertical)
     {
-        Vector3 oldPosition = this.movement;
-        this.movement.Set(horizontal, 0, vertical);
-        this.movement = this.movement.normalized * this.speed * Time.deltaTime;
-        this.playerRigidBody.MovePosition(transform.position + movement);
-        Network.OnMoveClick(oldPosition, this.movement);
+        if (vertical != 0 || horizontal != 0)
+        {
+            this.movement.Set(horizontal, 0, vertical);
+            this.movement = this.movement.normalized * this.speed * Time.deltaTime;
+            this.playerRigidBody.MovePosition(transform.position + movement);
+            Network.Move(this.transform.position);
+        }
     }
 
     public void Move(Vector3 position)
