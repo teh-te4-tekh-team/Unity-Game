@@ -10,4 +10,6 @@ public class GameUser
     public string CheckPointPosition;
 
     public int Level;
+
+    public int HightScore;
 }
