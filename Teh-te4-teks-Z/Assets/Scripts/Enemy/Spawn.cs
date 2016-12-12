@@ -21,7 +21,7 @@ public class Spawn : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.name != "PlayerModel") return;
+        if(other.name != "CurrentPlayer") return;
         
         if (other.transform.root.CompareTag("Player"))
         {

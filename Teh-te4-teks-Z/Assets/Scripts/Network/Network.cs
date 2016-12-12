@@ -16,7 +16,6 @@ public class Network : MonoBehaviour
         socket.On("open", OnConnected);
         socket.On("register", OnRegister);
         socket.On("spawn", OnSpawn);
-        socket.On("move", OnMove);
         socket.On("requestPosition", OnRequestPosition);
         socket.On("updatePosition", OnUpdatePosition);
         socket.On("disconnected", OnDisconnect);
@@ -33,8 +32,7 @@ public class Network : MonoBehaviour
         if (e.data["x"])
         {
             Vector3 position = JsonUtility.FromJson<Vector3>(e.data.ToString());
-            PlayerMovement movement = player.GetComponent<PlayerMovement>();
-            movement.Move(position);
+            player.transform.position = position;
         }
     }
 
@@ -42,18 +40,12 @@ public class Network : MonoBehaviour
     {
         string id = e.data["id"].str;
         this.spawner.AddPlayer(id, currentPlayer);
-        currentPlayer.GetComponent<NetworkEntity>().id = id;
+
+        this.currentPlayer.GetComponent<NetworkEntity>().id = id;
+        this.currentPlayer.GetComponent<PlayerMovement>().PlayerId = id;
+        this.currentPlayer.GetComponent<PlayerMovement>().Id = id;
+
         Debug.Log("Player with an id: " + id + " added.");
-    }
-
-    private void OnMove(SocketIOEvent e)
-    {
-        string playerId = e.data["id"].str;
-        GameObject player = this.spawner.FindPlayer(playerId);
-
-        Vector3 position = JsonUtility.FromJson<Vector3>(e.data.ToString());
-        PlayerMovement movement = player.GetComponent<PlayerMovement>();
-        movement.Move(position);
     }
 
     private void OnDisconnect(SocketIOEvent e)
@@ -69,7 +61,6 @@ public class Network : MonoBehaviour
 
     private void OnUpdatePosition(SocketIOEvent e)
     {
-        Debug.Log("Update position");
         string id = e.data["id"].str;
         GameObject player = this.spawner.FindPlayer(id);
 
@@ -79,6 +70,6 @@ public class Network : MonoBehaviour
 
     public static void Move(Vector3 destination)
     {
-        socket.Emit("move", new JSONObject(JsonUtility.ToJson(destination)));
+        socket.Emit("updatePosition", new JSONObject(JsonUtility.ToJson(destination)));
     }
 }

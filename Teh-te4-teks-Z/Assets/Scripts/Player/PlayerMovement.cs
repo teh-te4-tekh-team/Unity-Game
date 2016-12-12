@@ -3,15 +3,34 @@
 public class PlayerMovement : MonoBehaviour {
 
     public float speed = 10f;
-    public PlayerHealth playerHealth;
+    private PlayerHealth playerHealth;
 
     private Vector3 movement;
     private Rigidbody playerRigidBody;
 
-    void Awake()
+    private Animator animator;
+
+    private string id;
+
+    private string currentPlayerId;
+
+    private void Awake()
     {
-        this.playerRigidBody = GetComponent<Rigidbody>();
+        this.playerRigidBody = this.GetComponent<Rigidbody>();
         this.playerHealth = this.GetComponent<PlayerHealth>();
+        this.animator = this.GetComponentInChildren<Animator>();
+    }
+
+    public string PlayerId
+    {
+        get { return this.currentPlayerId; }
+        set { this.currentPlayerId = value; }
+    }
+
+    public string Id
+    {
+        get { return this.id; }
+        set { this.id = value; }
     }
 
     void FixedUpdate()
@@ -24,30 +43,34 @@ public class PlayerMovement : MonoBehaviour {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        if (vertical != 0 || horizontal != 0)
+
+        if (IsCurrentPlayer())
         {
             Move(horizontal, vertical);
         }
     }
 
-    public void Move(float horizontal, float vertical)
+    private void Move(float horizontal, float vertical)
     {
-        if (vertical != 0 || horizontal != 0)
+        bool isWalking = vertical != 0 || horizontal != 0;
+        this.animator.SetBool("IsWalking", isWalking);
+        if (isWalking)
         {
             this.movement.Set(horizontal, 0, vertical);
             this.movement = this.movement.normalized * this.speed * Time.deltaTime;
             this.playerRigidBody.MovePosition(transform.position + movement);
-            Network.Move(this.transform.position);
+
+            Network.Move(transform.position + movement);
         }
     }
 
-    public void Move(Vector3 position)
-    {
-        this.Move(position.x, position.z);
-    } 
-
-    void Die()
+    private void Die()
     {
         this.transform.position = Vector3.zero;
+    }
+
+    private bool IsCurrentPlayer()
+    {
+        return this.Id == this.PlayerId;
     }
 }

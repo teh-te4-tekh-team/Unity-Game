@@ -8,8 +8,8 @@ public class ClickMove : MonoBehaviour
     {
         if (this.player.GetComponent<PlayerHealth>().currentHealth < 0)
         {
-            PlayerMovement navPos = this.player.GetComponent<PlayerMovement>();
-            navPos.Move(hit.point);
+            //PlayerMovement navPos = this.player.GetComponent<PlayerMovement>();
+            //navPos.Move(hit.point);
         }
     }
 }

@@ -6,16 +6,16 @@ public class GameOverManager : MonoBehaviour {
 
     Animator animator;
 
-	// Use this for initialization
-	void Awake () {
+	void Awake ()
+    {
         animator = GetComponent<Animator>();    
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         if (playerHealth.currentHealth <= 0)
         {
             animator.SetTrigger("PlayerDead");
         }
-	}
+    }
 }
