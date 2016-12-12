@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Assets.Scripts;
+using UnityEditor;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -20,6 +22,51 @@ public class MainMenu : MonoBehaviour
     public GameUser currentUser;
     public GameObject player;
 
+    public void Login()
+    {
+        ApplicationUser user = new ApplicationUser();
+
+        using (SHA512 shaM = new SHA512Managed())
+        {
+            byte[] hash = shaM.ComputeHash(Encoding.UTF8.GetBytes(this.Password.text));
+            user.Password = Convert.ToBase64String(hash);
+        }
+
+        user.Email = this.Email.text;
+
+        string url = "http://localhost:4861/api/User";
+        string data = JsonUtility.ToJson(user);
+
+        this.StartCoroutine(Utils.Post(url, data, this.ApplicationUserLoginAction));
+    }
+
+    void ApplicationUserLoginAction(string requestText)
+    {
+        if (string.IsNullOrEmpty(requestText))
+        {
+            this.StatusText.text = "Invalid Credentials";
+            this.StatusText.color = Color.red;
+        }
+        else
+        {
+            string url = "http://localhost:4861/api/Player";
+            string data = requestText;
+
+            this.StartCoroutine(Utils.Post(url, data, this.GameUserLoginAction));
+        }
+    }
+
+    void GameUserLoginAction(string requestText)
+    {
+        GameUser user = JsonUtility.FromJson<GameUser>(requestText);
+        this.currentUser = user;
+
+        this.Animator.SetTrigger("Logged");
+
+        this.StatusText.text = "Username: " + user.Username;
+        this.StatusText.color = Color.green;
+    }
+
     public void Settings()
     {
         this.CurrentUsername.text = this.currentUser.Username;
@@ -34,101 +81,18 @@ public class MainMenu : MonoBehaviour
     public void ChangeUsername()
     {
         this.currentUser.Username = this.CurrentUsername.text;
-        string json = JsonUtility.ToJson(this.currentUser);
+        string data = JsonUtility.ToJson(this.currentUser);
 
-        this.StartCoroutine(this.UsernameChangeRequest(json));
+        string url = "http://localhost:4861/api/Player/" + this.currentUser.GameUserID;
+
+        this.StartCoroutine(Utils.Update(url, data, this.ChangeUsernameAction));
     }
 
-    IEnumerator UsernameChangeRequest(string json)
+    void ChangeUsernameAction(string requestText)
     {
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers.Add("Content-Type", "application/json");
-        headers.Add("X-HTTP-Method-Override", "PUT");
-
-        byte[] pData = Encoding.ASCII.GetBytes(json.ToCharArray());
-
-        WWW request = new WWW("http://localhost:4861/api/GameUser/" + this.currentUser.GameUserID, pData, headers);
-
-        yield return request;
-
-        if (request.isDone)
-        {
-            this.StatusText.text = "Username: " + this.currentUser.Username;
-        }
+        this.StatusText.text = "Username: " + this.currentUser.Username;
     }
     
-
-    public void Login()
-    {
-        ApplicationUser user = new ApplicationUser();
-
-        using (SHA512 shaM = new SHA512Managed())
-        {
-            byte[] hash = shaM.ComputeHash(Encoding.UTF8.GetBytes(this.Password.text));
-            user.Password = Convert.ToBase64String(hash);
-        }
-
-        user.Email = this.Email.text;
-
-        string json = JsonUtility.ToJson(user);
-
-        this.StartCoroutine(this.GetUser(json));
-    }
-
-    IEnumerator GetUser(string json)
-    {
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers.Add("Content-Type", "application/json");
-
-        byte[] pData = Encoding.ASCII.GetBytes(json.ToCharArray());
-
-        WWW request = new WWW("http://localhost:4861/api/ApplicationUser", pData, headers);
-
-        yield return request;
-
-        if (request.isDone)
-        {
-            if (string.IsNullOrEmpty(request.text))
-            {
-                this.StatusText.text = "Invalid Credentials";
-                this.StatusText.color = Color.red;
-            }
-            else
-            {
-                this.StartCoroutine(this.GetGameUser(request.text));
-            }
-        }
-    }
-
-    private IEnumerator GetGameUser(string json)
-    {
-        Dictionary<string, string> headers = new Dictionary<string, string>();
-        headers.Add("Content-Type", "application/json");
-
-        byte[] pData = Encoding.ASCII.GetBytes(json.ToCharArray());
-
-        WWW request = new WWW("http://localhost:4861/api/GameUser", pData, headers);
-
-        yield return request;
-
-        if (request.isDone)
-        {
-            GameUser user = JsonUtility.FromJson<GameUser>(request.text);
-            this.currentUser = user;
-
-            PlayerPrefs.SetInt("GameUserID", user.GameUserID);
-            PlayerPrefs.SetString("Username", user.Username);
-            PlayerPrefs.SetInt("Level", user.Level);
-            PlayerPrefs.SetInt("HighScore", user.HightScore);
-
-            this.Animator.SetTrigger("Logged");
-
-            this.StatusText.text = "Username: " + user.Username;
-            this.StatusText.color = Color.green;
-        }
-    }
-
-
     public void LoadGame()
     {
         SceneManager.LoadSceneAsync("Game");
@@ -136,6 +100,8 @@ public class MainMenu : MonoBehaviour
 
     public void ExitGame()
     {
-        Application.Quit();
+        Debug.Log("exit");
+        //Application.Quit();
+        EditorApplication.isPlaying = false;
     }
 }
