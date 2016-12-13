@@ -2,20 +2,20 @@
 using System.Collections;
 
 public class GameOverManager : MonoBehaviour {
-    public PlayerHealth playerHealth;
+ //   public PlayerHealth playerHealth;
 
-    Animator animator;
+ //   Animator animator;
 
-	// Use this for initialization
-	void Awake () {
-        animator = GetComponent<Animator>();    
-	}
+	//// Use this for initialization
+	//void Awake () {
+ //       animator = GetComponent<Animator>();    
+	//}
 	
-	// Update is called once per frame
-	void Update () {
-        if (playerHealth.currentHealth <= 0)
-        {
-            animator.SetTrigger("PlayerDead");
-        }
-	}
+	//// Update is called once per frame
+	//void Update () {
+ //       if (playerHealth.currentHealth <= 0)
+ //       {
+ //           animator.SetTrigger("PlayerDead");
+ //       }
+	//}
 }
