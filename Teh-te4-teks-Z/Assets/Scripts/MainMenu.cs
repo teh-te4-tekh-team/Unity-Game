@@ -64,7 +64,8 @@ public class MainMenu : MonoBehaviour
         this.Animator.SetTrigger("Logged");
 
         this.StatusText.text = "Username: " + user.Username;
-        this.StatusText.color = Color.green;
+        Color color = new Color(0.51f, 0.51f, 0.51f);
+        this.StatusText.color = color;
     }
 
     public void Settings()
