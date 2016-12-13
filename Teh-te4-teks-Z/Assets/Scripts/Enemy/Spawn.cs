@@ -1,11 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
+using UnityEngine.Networking;
 
-public class Spawn : MonoBehaviour {
+public class Spawn : NetworkBehaviour
+{
 
     public Transform player;
-    public PlayerHealth playerHealth;
     public GameObject enemy;
     public float spawnTime = 3f;
+    
+    private int playerCount;
 
 
     void FixedUpdate()
@@ -13,30 +17,53 @@ public class Spawn : MonoBehaviour {
         //float distance = Vector3.Distance(this.transform.position, this.player.position);
         //float range = (GetComponent<Collider>() as SphereCollider).radius;
 
-        if (this.playerHealth.currentHealth <= 0)
+        PlayerController[] playerControllers = this.GetComponents<PlayerController>();
+
+        if (playerControllers.Length == 0)
         {
-            this.CancelInvoke("SpawnEnemy");
-        }        
+            return; 
+        }
+
+        if (playerControllers.All(playerHealth => playerHealth.currentHealth <= 0))
+        {
+            this.CancelInvoke("CmdSpawnEnemy");
+        }
+       
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.name != "PlayerModel") return;
-        
+        if (other.name != "PlayerModel" || this.playerCount > 0) return;
+
         if (other.transform.root.CompareTag("Player"))
         {
-            this.InvokeRepeating("SpawnEnemy", 0f, this.spawnTime);
-        }        
+            this.playerCount++;
+            this.InvokeRepeating("CmdSpawnEnemy", 0f, this.spawnTime);
+        }
     }
 
     void OnTriggerExit(Collider other)
     {
-        this.CancelInvoke("SpawnEnemy");
+        this.playerCount--;
+        this.CancelInvoke("CmdSpawnEnemy");
     }
 
-    void SpawnEnemy()
+    [Command]
+    void CmdSpawnEnemy()
     {
-        Instantiate(this.enemy, this.transform.position, this.transform.rotation);
-        this.enemy.GetComponentInChildren<MeshRenderer>().enabled = false;
+        if (!this.isServer)
+        {
+            return;
+        }
+        GameObject spawnedEnemy = Instantiate(this.enemy, this.transform.position, this.transform.rotation) as GameObject;
+        //MeshRenderer[] enemyComponents = enemy.GetComponentsInChildren<MeshRenderer>();
+
+        /*foreach (MeshRenderer enemyComponent in enemyComponents)
+        {
+            enemyComponent.enabled = false;
+        }*/
+        NetworkServer.Spawn(spawnedEnemy);
+
     }
+
 }

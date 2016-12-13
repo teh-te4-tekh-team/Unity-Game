@@ -7,7 +7,7 @@ public class EnemyAttack : MonoBehaviour
     public int attackDamage = 10;
 
     GameObject player;
-    PlayerHealth playerHealth;
+    PlayerController playerController;
     EnemyHealth enemyHealth;
     EnemyMovement enemyMovement;
     private bool playerInRange;
@@ -16,7 +16,7 @@ public class EnemyAttack : MonoBehaviour
     void Awake()
     {
         this.player = GameObject.FindGameObjectWithTag("Player");
-        this.playerHealth = this.player.GetComponent<PlayerHealth>();
+        this.playerController = this.player.GetComponent<PlayerController>();
         this.enemyHealth = GetComponent<EnemyHealth>();
         this.enemyMovement = GetComponent<EnemyMovement>();
     }
@@ -53,9 +53,9 @@ public class EnemyAttack : MonoBehaviour
     {
         this.timer = 0f;
 
-        if (this.playerHealth.currentHealth > 0)
+        if (this.playerController.currentHealth > 0)
         {
-            this.playerHealth.TakeDamage(attackDamage);
+            this.playerController.TakeDamage(attackDamage);
         }
         else
         {

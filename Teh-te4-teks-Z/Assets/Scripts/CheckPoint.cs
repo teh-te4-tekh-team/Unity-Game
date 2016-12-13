@@ -14,11 +14,6 @@ public class CheckPoint : MonoBehaviour
 	    this.gameUser = new GameUser();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     void OnTriggerEnter(Collider other)
     {
         if (other.name != "PlayerModel") return;

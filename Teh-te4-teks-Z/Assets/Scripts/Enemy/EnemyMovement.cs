@@ -1,28 +1,29 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour {
-
-    public PlayerHealth playerHealth;
     
-
-    Transform player;
+    GameObject[] players;
     NavMeshAgent nav;    
 
     void Awake()
     {
-        this.player = GameObject.FindGameObjectWithTag("Player").transform;
-        this.playerHealth = this.player.GetComponent<PlayerHealth>();
+        this.players = GameObject.FindGameObjectsWithTag("Player");
         this.nav = this.GetComponent<NavMeshAgent>();
     }
 
     void FixedUpdate()
     {
-        if (this.playerHealth.currentHealth <= 0)
+        foreach (GameObject player in this.players)
         {
-            this.nav.Stop();
-        }
+            if (player.GetComponent<PlayerController>().currentHealth <= 0)
+            {
+                this.nav.Stop();
+            }
 
-        this.nav.SetDestination(this.player.position);
-        this.nav.speed = 30;        
+            this.nav.SetDestination(player.transform.position);
+            this.nav.speed = 30;
+        }
+             
     }
 }

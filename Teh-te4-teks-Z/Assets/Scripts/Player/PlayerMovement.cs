@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class PlayerMovement : MonoBehaviour {
+public class PlayerMovement : NetworkBehaviour {
 
     public float speed = 10f;
     public PlayerHealth playerHealth;
@@ -11,7 +12,7 @@ public class PlayerMovement : MonoBehaviour {
     private Vector3 movement;
     private Rigidbody playerRigidBody;
 
-    private MainMenu menu;
+    //private MainMenu menu;
 
     void Awake()
     {
@@ -22,10 +23,15 @@ public class PlayerMovement : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if (this.playerHealth.currentHealth <= 0)
+        if (!this.isLocalPlayer)
         {
-            this.Dead();
+            return;
         }
+
+        //if (this.playerHealth.currentHealth <= 0)
+        //{
+        //    this.Dead();
+        //}
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 

@@ -115,11 +115,10 @@ public class MainMenu : MonoBehaviour
         {
             GameUser user = JsonUtility.FromJson<GameUser>(request.text);
             this.currentUser = user;
-
-            PlayerPrefs.SetInt("GameUserID", user.GameUserID);
+            
             PlayerPrefs.SetString("Username", user.Username);
+            PlayerPrefs.SetInt("GameUserID", user.GameUserID);
             PlayerPrefs.SetInt("Level", user.Level);
-            PlayerPrefs.SetInt("HighScore", user.HightScore);
 
             this.Animator.SetTrigger("Logged");
 
