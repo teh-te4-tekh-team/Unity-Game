@@ -22,10 +22,14 @@ public class QuestManager : MonoBehaviour
 
     }
 
-    public void ShowQuestText(string questText)
+    public void ShowQuestText(string[] questText, bool clearPrevious = true)
     {
-        this.dialogueManager.dialogueLines.Clear();
-        this.dialogueManager.dialogueLines.Add(questText);
+        if (clearPrevious)
+        {
+            this.dialogueManager.dialogueLines.Clear();
+        }
+
+        this.dialogueManager.dialogueLines.AddRange(questText);
 
         this.dialogueManager.currentLine = 0;
         this.dialogueManager.ShowDialogue();

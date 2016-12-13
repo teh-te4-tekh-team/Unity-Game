@@ -7,8 +7,10 @@ public class QuestObject : MonoBehaviour
 
     public QuestManager questManager;
 
-    public string startText;
-    public string endText;
+    public string[] startText;
+    public string[] endText;
+
+    public bool clearPreviousQuestText;
 
     // Use this for initialization
     void Start()
@@ -24,7 +26,7 @@ public class QuestObject : MonoBehaviour
 
     public void StartQuest()
     {
-        this.questManager.ShowQuestText(this.startText);
+        this.questManager.ShowQuestText(this.startText, this.clearPreviousQuestText);
     }
 
     public void EndQuest()
