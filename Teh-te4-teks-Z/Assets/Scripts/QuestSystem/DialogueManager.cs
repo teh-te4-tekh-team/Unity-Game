@@ -15,13 +15,12 @@ public class DialogueManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (this.isDialogueActive && Input.GetKeyDown(KeyCode.Space))
+        if (this.isDialogueActive && Input.GetKeyDown(KeyCode.Tab))
         {
             this.currentLine++;
         }
